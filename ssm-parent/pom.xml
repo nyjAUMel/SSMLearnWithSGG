@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>ssm-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <!--  符项目  -->
+    <!--
+    当一个Maven项目作为其他项目的父项目时，它本身不包含实际的业务代码，只是用来管理子模块的依赖和配置，因此应该设置为pom类型。
+
+    jar：默认值，用于普通的Java项目
+    war：用于Web应用程序
+    pom：用于父项目或聚合项目
+    -->
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+</project>
