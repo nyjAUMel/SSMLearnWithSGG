@@ -12,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -21,8 +22,22 @@ import java.util.Scanner;
  * */
 @SpringBootApplication
 public class Spring001IocApplication {
-    // FactoryBean在容器中放的组件类型，是接口中范型指定的类型。组件名是工厂子的名字(BYDFactory)
     public static void main(String[] args) {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        // 拿到环境变量
+        ConfigurableEnvironment environment = ioc.getEnvironment();
+        String os = environment.getProperty("OS");
+        System.out.println(os);
+
+        Dog dog = ioc.getBean("dog", Dog.class);
+        System.out.println(dog);
+    }
+
+
+    // FactoryBean在容器中放的组件类型，是接口中范型指定的类型。组件名是工厂子的名字(BYDFactory)
+    public static void test05(String[] args) {
         ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
         System.out.println("====================ioc容器创建完成================");
 
