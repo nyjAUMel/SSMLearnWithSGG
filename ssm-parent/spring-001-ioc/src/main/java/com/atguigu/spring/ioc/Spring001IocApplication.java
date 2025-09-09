@@ -2,9 +2,12 @@ package com.atguigu.spring.ioc;
 
 import ch.qos.logback.core.CoreConstants;
 import com.atguigu.spring.ioc.bean.Car;
+import com.atguigu.spring.ioc.bean.Cat;
 import com.atguigu.spring.ioc.bean.Dog;
 import com.atguigu.spring.ioc.bean.Person;
 import com.atguigu.spring.ioc.controller.UserController;
+import com.atguigu.spring.ioc.dao.DeliveryDao;
+import com.atguigu.spring.ioc.dao.UserDao;
 import com.atguigu.spring.ioc.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,16 +16,78 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Scanner;
 
 /*
  * 这个是主入口类，称为主程序类
+ *  application.properties就是这个项目的配置文件
  * */
 @SpringBootApplication
 public class Spring001IocApplication {
+
     public static void main(String[] args) {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        DeliveryDao bean = ioc.getBean(DeliveryDao.class);
+        bean.saveDelivery();
+    }
+
+    public static void test11(String[] args) throws FileNotFoundException {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        File file = ResourceUtils.getFile("classpath:abc.jpg");
+        System.out.println("File: " + file);
+    }
+
+
+    public static void test10(String[] args) {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        Dog d = ioc.getBean("dog", Dog.class);
+        System.out.println(d);
+
+        Cat cat = ioc.getBean("cat", Cat.class);
+        System.out.println(cat);
+
+    }
+
+    public static void test09(String[] args) {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        UserDao bean = ioc.getBean(UserDao.class);
+        System.out.println(bean);
+    }
+
+    public static void test08(String[] args) {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        UserService bean = ioc.getBean(UserService.class);
+        System.out.println(bean);
+
+    }
+
+    public static void test07(String[] args) {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        UserController bean = ioc.getBean(UserController.class);
+        System.out.println(bean);
+
+        UserService us = ioc.getBean(UserService.class);
+        System.out.println(us);
+    }
+
+    public static void test06(String[] args) {
         ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
         System.out.println("====================ioc容器创建完成================");
 
@@ -47,14 +112,14 @@ public class Spring001IocApplication {
 
 
     /*
-    * 默认：分层注解能起作用的前提是，这些组件必须在主程序所在的包及其子包结构下
-    *   @ComponentScan()这个注解用来扫描参数包下的注解
-    * Spring提供了快速的MVC分层注解
-    *   1、@Controller 控制器
-    *   2、@Service 服务层
-    *   3、@Repository 持久层
-    *   4、@Component 组件
-    *  */
+     * 默认：分层注解能起作用的前提是，这些组件必须在主程序所在的包及其子包结构下
+     *   @ComponentScan()这个注解用来扫描参数包下的注解
+     * Spring提供了快速的MVC分层注解
+     *   1、@Controller 控制器
+     *   2、@Service 服务层
+     *   3、@Repository 持久层
+     *   4、@Component 组件
+     *  */
     public static void test04(String[] args) {
         ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
         UserController uc = ioc.getBean(UserController.class);
@@ -72,17 +137,17 @@ public class Spring001IocApplication {
 
 
     /*
-    * 组件：框架的底层配置
-    *   配置文件：指定位置
-    *   配置类：分类管理组件的配置，配置累也是容器中的一种组件，这种组件用来集中管理普通的Bean
-    * Bean的创建时机：容器启动过程中就会创建组件对象。
-    * 单实例特性：所有组件默认是单例的。每次获取容器直接从容器中拿。容器提前会创建组件
-    *  */
+     * 组件：框架的底层配置
+     *   配置文件：指定位置
+     *   配置类：分类管理组件的配置，配置累也是容器中的一种组件，这种组件用来集中管理普通的Bean
+     * Bean的创建时机：容器启动过程中就会创建组件对象。
+     * 单实例特性：所有组件默认是单例的。每次获取容器直接从容器中拿。容器提前会创建组件
+     *  */
     public static void test02(String[] args) {
         ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class);
         System.out.println("容器执行完成-------");
-        Person p1 = ioc.getBean("ppp",Person.class);
-        Person p2 = ioc.getBean("ppp",Person.class);
+        Person p1 = ioc.getBean("ppp", Person.class);
+        Person p2 = ioc.getBean("ppp", Person.class);
         System.out.println(p1 == p2);
     }
 
@@ -102,11 +167,11 @@ public class Spring001IocApplication {
         // 组件名字全局唯一； 组件名重复了，一定只会给容器中放一个最先声明的那个。
 
         /*
-        * 小结：
-        *   从容器中获取组件：
-        *           1、组件不存在，抛异常：NoSuchBeanDefinitionException
-        *           2、（通过类型获取）组件不唯一，抛异常：NoUniqueBeanDefinitionException
-        * */
+         * 小结：
+         *   从容器中获取组件：
+         *           1、组件不存在，抛异常：NoSuchBeanDefinitionException
+         *           2、（通过类型获取）组件不唯一，抛异常：NoUniqueBeanDefinitionException
+         * */
 
         // 4.1 按照组件的名获取对象
         Person ppp = (Person) ioc.getBean("ppp");
@@ -128,8 +193,6 @@ public class Spring001IocApplication {
 
     // 3. 给容器注册一个自己的组件； 容器中的每个组件名都是方法名
     // 如果不想用方法名当组件名也可以给注解添加值，这个值就是组件名
-
-
 
 
 }

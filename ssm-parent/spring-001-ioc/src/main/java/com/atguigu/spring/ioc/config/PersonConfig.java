@@ -20,6 +20,10 @@ public class PersonConfig {
      */
     // @Conditional 注解是 Spring 框架中的一个重要注解，用于根据特定条件来决定是否创建某个 Bean。
     //@Conditional(WindowsCondition.class)
+
+    // 表示当容器中有jobs对象时，将这个bean放进容器当中
+    //@ConditionalOnBean(name = "jobs")
+    //@Lazy // 通常@Scope为默认单例时使用，因为非单例创建对象之有在获取时才创建对象。
     @Bean("jobs")
     public Person jobs(){
         Person person = new Person();
@@ -59,8 +63,10 @@ public class PersonConfig {
         return person;
     }
 
+    //使用@Primary指定默认的bean。
+    //@Primary
     @Bean("lisi")
-    public Person person2() {
+    public Person lisi() {
         Person person = new Person();
         person.setName("Cooper");
         person.setAge(0);

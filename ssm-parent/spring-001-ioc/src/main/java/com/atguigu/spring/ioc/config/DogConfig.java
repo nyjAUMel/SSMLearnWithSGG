@@ -20,11 +20,22 @@ public class DogConfig {
     // 不过这个底层好像有BUG
     @ConditionalOnMissingBean(name = "bill")
 
-    // 表示当容器中有jobs对象时，将这个bean放进容器当中
-    //@ConditionalOnBean(name = "jobs")
-    //@Lazy // 通常@Scope为默认单例时使用，因为非单例创建对象之有在获取时才创建对象。
-    @Bean("dog")
+    @Bean
     public Dog dog() {
         return new Dog();
+    }
+
+    @Bean
+    public Dog dog1() {
+        Dog dog = new Dog();
+        dog.setName("灰太狼");
+        return dog;
+    }
+
+    @Bean
+    public Dog dog2() {
+        Dog dog = new Dog();
+        dog.setName("双叉狼");
+        return dog;
     }
 }
