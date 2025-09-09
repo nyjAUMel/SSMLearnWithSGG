@@ -15,6 +15,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.ResourceUtils;
 
@@ -30,7 +31,23 @@ import java.util.Scanner;
 @SpringBootApplication
 public class Spring001IocApplication {
 
+    /**
+     * 原生方式创建、使用Spring容器
+     */
     public static void main(String[] args) {
+
+        // 1. 自己创建一个ioc容器，ioc里面有什么由传入的路径路径文件决定
+        ClassPathXmlApplicationContext ioc =
+                new ClassPathXmlApplicationContext("classpath:ioc.xml");
+        for (String beanDefinitionName : ioc.getBeanDefinitionNames()) {
+            System.out.println(beanDefinitionName);
+        }
+
+        Map<String, Person> beansOfType = ioc.getBeansOfType(Person.class);
+        System.out.println(beansOfType);
+    }
+
+    public static void test12(String[] args) {
         ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
         System.out.println("====================ioc容器创建完成================");
 

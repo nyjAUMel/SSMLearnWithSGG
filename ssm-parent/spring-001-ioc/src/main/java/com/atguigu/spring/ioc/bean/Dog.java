@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
  * @CreationDate: 2025/9/6 12:03
  */
 @Data
-
 public class Dog {
 
     // Spring获取bean的属性默认为空值
