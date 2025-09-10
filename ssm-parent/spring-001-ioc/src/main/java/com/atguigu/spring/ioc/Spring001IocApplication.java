@@ -1,10 +1,7 @@
 package com.atguigu.spring.ioc;
 
 import ch.qos.logback.core.CoreConstants;
-import com.atguigu.spring.ioc.bean.Car;
-import com.atguigu.spring.ioc.bean.Cat;
-import com.atguigu.spring.ioc.bean.Dog;
-import com.atguigu.spring.ioc.bean.Person;
+import com.atguigu.spring.ioc.bean.*;
 import com.atguigu.spring.ioc.controller.UserController;
 import com.atguigu.spring.ioc.dao.DeliveryDao;
 import com.atguigu.spring.ioc.dao.UserDao;
@@ -31,10 +28,26 @@ import java.util.Scanner;
 @SpringBootApplication
 public class Spring001IocApplication {
 
+    public static void main(String[] args) {
+        ConfigurableApplicationContext ioc = SpringApplication.run(Spring001IocApplication.class, args);
+        System.out.println("====================ioc容器创建完成================");
+
+        Dog dog1 = ioc.getBean("dog1", Dog.class);
+        System.out.println(dog1);
+
+        User user = ioc.getBean("user", User.class);
+        System.out.println(user);
+
+        User user2 = ioc.getBean("user", User.class);
+        System.out.println(user2);
+
+        Car car = ioc.getBean("BYDFactory", Car.class);
+    }
+
     /**
      * 原生方式创建、使用Spring容器
      */
-    public static void main(String[] args) {
+    public static void test13(String[] args) {
 
         // 1. 自己创建一个ioc容器，ioc里面有什么由传入的路径路径文件决定
         ClassPathXmlApplicationContext ioc =

@@ -19,7 +19,6 @@ public class DogConfig {
     // 表示当容器中没有bill对象时，讲这个bean放进容器当中
     // 不过这个底层好像有BUG
     @ConditionalOnMissingBean(name = "bill")
-
     @Bean
     public Dog dog() {
         return new Dog();
