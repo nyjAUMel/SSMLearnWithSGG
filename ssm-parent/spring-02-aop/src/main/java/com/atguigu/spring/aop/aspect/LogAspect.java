@@ -1,8 +1,13 @@
 package com.atguigu.spring.aop.aspect;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
  * Description:
@@ -10,9 +15,22 @@ import org.springframework.stereotype.Component;
  * @Author nyjAUMel
  * @Create: 2025-09-11 10:45
  */
+@Order(1)
 @Component
 @Aspect // 告诉这个组件是个切面
 public class LogAspect {
+
+    /**
+     * 定义一个切点，用于匹配特定方法的执行。
+     * <p>
+     * 该切点匹配所有在 com.atguigu.spring.aop.calculator.MathCalculator 类中定义的
+     * 返回类型为 int 的方法的执行。
+     */
+    @Pointcut("execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))")
+    public void pointCut() {
+    }
+
+
     /*
     告诉Spring以下通知方法何时何地运行
         何时：
@@ -20,6 +38,8 @@ public class LogAspect {
             @AfterReturning：方法正常返回之后运行
             @AfterThrowing：方法抛出异常时运行
             @After：方法执行之后运行
+            @Around：环绕通知，可以控制目标方法是否执行，修改目标方法参数、执行结果等。
+
         何地：
             切入点表达式：
                 execution(方法的全签名)：
@@ -40,24 +60,38 @@ public class LogAspect {
      */
     //@Before("execution(int add(int, int))") 为方法名为add且参数是两个int的方法添加切面
     //@Before("execution(int *(int, int))") // 为任意方法名且参数是两个int的方法添加切面
-    @Before("execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))")
-    public void logStart() {
-        System.out.println("【切面 - 日志】开始...");
+    //@Before("execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))")
+    @Before("pointCut()")
+    public void logStart(JoinPoint joinPoint) {
+        // 拿到方法全签名
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        // 方法名
+        String name = signature.getName();
+        // 目标方法传来的参数值
+        Object[] args = joinPoint.getArgs();
+        System.out.println("【切面 - 日志】【" + name + "】开始；参数列表【" + Arrays.toString(args) + "】...");
     }
 
-    @After("execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))")
+    //@After("execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))")
+    @After("pointCut()")
     public void logEnd() {
         System.out.println("【切面 - 日志】结束...");
     }
 
-    @AfterThrowing("execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))")
-    public void logException(Throwable e) {
-        System.out.println("【切面 - 日志】异常...");
+    //@AfterThrowing(value = "execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))", throwing = "e")
+    @AfterThrowing(value = "pointCut()", throwing = "e")
+    public void logException(JoinPoint joinPoint, Throwable e) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        String name = signature.getName();
+        System.out.println("【切面 - 日志】【" + name + "】异常..." + e.getMessage());
     }
 
-    @AfterReturning("execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))")
-    public void logReturn() {
-        System.out.println("【切面 - 日志】正常返回...");
+    //@AfterReturning(value = "execution(int com.atguigu.spring.aop.calculator.MathCalculator.*(..))", returning = "result") // returning = "result" 表示获取目标方法返回值
+    @AfterReturning(value = "pointCut()", returning = "result") // returning = "result" 表示获取目标方法返回值
+    public void logReturn(JoinPoint joinPoint, Object result) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        String name = signature.getName();
+        System.out.println("【切面 - 日志】【" + name + "】正常返回..." + result);
     }
 
     // 这个表示当参数为两个 int 类型时前置切入
