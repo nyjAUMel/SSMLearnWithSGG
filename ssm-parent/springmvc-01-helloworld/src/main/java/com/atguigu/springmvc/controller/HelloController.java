@@ -20,7 +20,7 @@ public class HelloController {
      *      ** 匹配任意数量的路径
      * @return
      */
-    @ResponseBody // @ResponseBody 注解在 Spring MVC 中的作用是将方法的返回值直接作为响应体返回给客户端，而不是解析为视图名称。
+    @ResponseBody // @ResponseBody @ResponseBody 注解的作用是告诉 Spring MVC 框架将方法的返回值直接写入 HTTP 响应体中，而不是解析为视图名称。
     @RequestMapping("/hell*/**") // 告诉Spring这是一个处理请求的映射
     public String handle04() {
         // 这么些默认时返回视图名，但前后端分离项目返回的就是数据，所以要加注解@ResponseBody

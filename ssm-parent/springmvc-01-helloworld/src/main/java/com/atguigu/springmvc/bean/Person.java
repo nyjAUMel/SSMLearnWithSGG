@@ -8,7 +8,7 @@ import lombok.Data;
  * @Author nyjAUMel
  * @Create: 2025-09-12 11:43
  */
-@Data
+@Data // JavaBen：定死的数据模型，定不死的用Map
 public class Person {
     private String username;
     private String password;

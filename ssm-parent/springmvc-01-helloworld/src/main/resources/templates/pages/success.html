@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>成功</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<h1>恭喜，登录成功</h1>
+<!-- Thymeleaf属性以th:开头 -->
+<h2>用户名：<span th:text="${username}"></span></h2>
+<!-- 行内写法 -->
+<h2>年龄：[[${age}]]</h2>
+
+<table>
+    <tr>
+        <th>序号</th>
+        <th>用户名</th>
+        <th>年龄</th>
+        <th>是否成年（if判断）</th>
+        <th>是否成年（三元运算符）</th>
+    </tr>
+    <tr th:each="user,iterStat : ${users}">
+        <td>[[${user.id}]]</td>
+        <td th:text="${user.username}"></td>
+        <td>[[${user.age}]]</td>
+        <td th:if="${user.age} >= 18">是</td>
+        <td th:if="${user.age} < 18">否</td>
+        <td th:text="${user.age >= 18 ? '是' : '否'}"></td>
+    </tr>
+</table>
+</body>
+</html>
