@@ -46,6 +46,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public R handleException(Exception e) {
         System.out.println("【全局】Exception异常");
+        e.printStackTrace();
+        System.out.println("---------------------------");
+        // 获取异常发生的具体类和方法
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        if (stackTrace.length > 0) {
+            StackTraceElement element = stackTrace[0];
+            System.out.println("异常发生位置: " + element.getClassName() + "." + element.getMethodName() +
+                    "(" + element.getFileName() + ":" + element.getLineNumber() + ")");
+        }
         return R.error(500, e.getMessage());
     }
 

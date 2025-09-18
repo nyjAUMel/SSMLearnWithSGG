@@ -1,5 +1,6 @@
 package com.atguigu.restful.crud.common;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,9 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+// 只要是描述JavaBean都用@Schema
+@Schema(description = "统一返回结果类")
 public class R<T> {
+    @Schema(description = "状态码")
     private Integer code;
+    @Schema(description = "提示信息")
     private String msg;
+    @Schema(description = "数据")
     private T data;
 
     /*

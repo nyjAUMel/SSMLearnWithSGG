@@ -3,12 +3,22 @@ package com.atguigu.restful.crud.controller;
 import com.atguigu.restful.crud.bean.Employee;
 import com.atguigu.restful.crud.common.R;
 import com.atguigu.restful.crud.service.EmployeeService;
+import com.atguigu.restful.crud.vo.req.EmployeeAddVo;
+import com.atguigu.restful.crud.vo.req.EmployeeUpdateVo;
+import com.atguigu.restful.crud.vo.resp.EmployeeRespVo;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +40,8 @@ import java.util.List;
  * 5. 【推荐】：编写一个全局异常处理器，处理MethodArgumentNotValidException（校验出错的异常），统一返回校验失败的提示信息
  * 6. 自定义校验 = 自定义校验注解 + 自定义验证器
  */
-
+// @Tag注解描述该Controller类的作用
+@Tag(name = "员工管理")
 @CrossOrigin // 该注解也可以标在方法上，表示：只有该方法允许跨域访问
 @RestController
 // 在类上使用 @RequestMapping("/api/v1") 注解意味着：为该整个控制器类中的所有方法提供统一的URL前缀
@@ -41,12 +52,27 @@ public class EmployeeRestController {
     private EmployeeService employeeService;
 
 
+    /*
+    @Parameters该注解用来生成Swagger时标明id的作用
+    @Parameter用来制定具体的参数
+    name要和参数里的名字一致
+    description描述信息
+    in = ParameterIn.PATH表示该参数在路径上
+    required = true表示该参数是必须的
+     */
+    @Parameters({@Parameter(name = "id", description = "员工id", in = ParameterIn.PATH, required = true)})
+    // @Operation用来描述方法作用
+    @Operation(summary = "按照id查询员工")
     @GetMapping("/employee/{id}")
-    public R get(@PathVariable Long id) {
+    public R get(@PathVariable
+                 Long id) {
         System.out.println("查询");
         Employee employee = employeeService.getEmpById(id);
-
-        return R.ok(employee);
+        System.out.println(employee);
+        EmployeeRespVo vo = new EmployeeRespVo();
+        BeanUtils.copyProperties(employee, vo);
+        System.out.println(vo);
+        return R.ok(vo);
     }
 
     /**
@@ -59,6 +85,7 @@ public class EmployeeRestController {
      * @DeleteMapping - 处理 DELETE 请求
      * @PatchMapping - 处理 PATCH 请求
      */
+    @Operation(summary = "按照id删除员工信息")
     @DeleteMapping("/employee/{id}")
     public R delete(@PathVariable Long id) {
         employeeService.deleteEmpById(id);
@@ -110,12 +137,14 @@ public class EmployeeRestController {
      * 这个方法将上面的add里异常处理移到了全局异常处理当中
      * 全局异常处理MethodArgumentNotValidException.class处理这个异常
      *
-     * @param employee
-     * @return
      */
+    @Operation(summary = "添加员工")
     @PostMapping("/employee")
-    public R add(@RequestBody @Valid Employee employee) {
+    public R add(@RequestBody @Valid EmployeeAddVo vo) {
 
+        Employee employee = new Employee();
+        // 把VO（视图模型）转为DO（数据库模型）
+        BeanUtils.copyProperties(vo, employee);
 
         System.out.println("新增用户方法执行");
         employeeService.addEmp(employee);
@@ -127,15 +156,30 @@ public class EmployeeRestController {
      * 修改员工
      * 要求：前端发送请求把员工的json放在请求体中；必须携带id
      */
+    @Operation(summary = "按照id修改员工信息")
     @PutMapping("/employee")
-    public R update(@RequestBody Employee employee) {
+    public R update(@RequestBody @Valid EmployeeUpdateVo vo) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(vo, employee);
+        System.out.println("修改用户方法执行");
         employeeService.updateEmp(employee);
         return R.ok();
     }
 
+    @Operation(summary = "获取所有员工信息")
     @GetMapping("/employees")
     public R all() {
         List<Employee> employees = employeeService.getList();
+        ArrayList<EmployeeRespVo> employeeRespVos = new ArrayList<>();
+
+        // 目的：脱敏、分层
+        for (Employee employee : employees) {
+            EmployeeRespVo vo = new EmployeeRespVo();
+            BeanUtils.copyProperties(employee, vo);
+            employeeRespVos.add(vo);
+        }
+
+
         return R.ok(employees);
     }
 

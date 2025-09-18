@@ -1,23 +1,22 @@
-package com.atguigu.restful.crud.bean;
+package com.atguigu.restful.crud.pojo;
 
-
-import com.atguigu.restful.crud.annotation.Gender;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-
+/**
+ * Description:
+ *
+ * @Author nyjAUMel
+ * @Create: 2025-09-18 15:43
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Employee {
-
+public class Emp {
     private Long id;
     private String name;
     private Integer age;

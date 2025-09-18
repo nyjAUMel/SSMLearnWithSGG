@@ -1,29 +1,30 @@
-package com.atguigu.restful.crud.bean;
+package com.atguigu.restful.crud.vo.resp;
 
-
-import com.atguigu.restful.crud.annotation.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-
+/**
+ * Description:
+ *
+ * @Author nyjAUMel
+ * @Create: 2025-09-17 15:43
+ */
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class Employee {
-
+public class EmployeeRespVo {
     private Long id;
     private String name;
-    private Integer age;
     private String email;
     private String gender;
     private String address;
     private BigDecimal salary;
+    // 用来控制 Java 对象在序列化（转 JSON）和反序列化（从 JSON 转回）时的日期/时间格式、时区等行为
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date birth;
 }

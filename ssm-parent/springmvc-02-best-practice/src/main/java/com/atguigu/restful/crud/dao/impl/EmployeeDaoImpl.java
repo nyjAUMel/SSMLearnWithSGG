@@ -31,14 +31,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public void addEmp(Employee employee) {
-        String sql = "insert into employee(name, age, email, gender, address, salary) values(?, ?, ?, ?, ?, ?)";
+        String sql = "insert into employee(name, age, email, gender, address, salary, birthday) values(?, ?, ?, ?, ?, ?, ?)";
         int update = jdbcTemplate.update(sql,
                 employee.getName(),
                 employee.getAge(),
                 employee.getEmail(),
                 employee.getGender(),
                 employee.getAddress(),
-                employee.getSalary());
+                employee.getSalary(),
+                employee.getBirth());
         System.out.println("新增影响行数：" + update);
     }
 
